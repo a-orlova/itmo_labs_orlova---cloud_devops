@@ -3,37 +3,23 @@ name: Good CI/CD Pipeline
 on: push
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Install Docker Compose
+      - name: Build and Test in Docker
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Build Project
-        run: docker-compose build  
-
-  test:
-    runs-on: ubuntu-20.04
-    needs: build
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Run Tests
-        run: ./run_tests.sh
-        continue-on-error: false
+          docker compose build
+          docker compose run --rm app ./run_tests.sh
 
   deploy:
     runs-on: ubuntu-20.04
-    needs: test
+    needs: build_and_test
     steps:
-      - name: Deploy to Server
-        run: ssh -i ~/.ssh/deploy_key user@server "deploy_script.sh"
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      - name: Start Application
-        run: docker-compose up -d
+      - name: Deploy to Server
+        run: ssh -i ~/.ssh/deploy_key user@server "docker compose pull && docker compose up -d"
