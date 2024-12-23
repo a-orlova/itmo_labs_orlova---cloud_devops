@@ -90,7 +90,7 @@ on: push
 
 jobs:
   build_and_test:
-    runs-on: ubuntu-20.04  # Фиксированная версия Ubuntu
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
