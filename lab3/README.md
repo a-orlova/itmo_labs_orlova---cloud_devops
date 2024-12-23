@@ -40,22 +40,22 @@ on: push
 
 jobs:
   build_and_test:
-    runs-on: ubuntu-latest  # 2. Использование последней версии Ubuntu
+    runs-on: ubuntu-latest  # 1. Использование последней версии Ubuntu
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Install Dependencies
-        run: npm install  # 3. Использование npm install вместо npm ci
+        run: npm install  # 2. Использование npm install вместо npm ci
 
       - name: Run Tests
-        run: ./run_tests.sh || true  # 4. Игнорирование результатов тестов
+        run: ./run_tests.sh || true  # 3. Игнорирование результатов тестов
 
       - name: Build Docker Image
-        run: docker-compose build  # 5. Использование устаревшей установки docker-compose
+        run: docker-compose build  # 4. Использование устаревшей установки docker-compose
 
       - name: Deploy
-        run: ssh user@server "docker-compose up -d"  # 6. Небезопасный SSH-доступ
+        run: ssh user@server "docker-compose up -d"  # 5. Небезопасный SSH-доступ
 ```
 
 ---
