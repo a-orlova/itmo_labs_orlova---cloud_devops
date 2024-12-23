@@ -1,20 +1,22 @@
-name: Bad CI/CD pipeline
+name: Bad CI/CD Pipeline
 
 on: push
 
 jobs:
-  build_and_test:  #1. объединили тестирование и сборку
-    runs-on: ubuntu-latest  # 2. использовали последнюю версию убунту
+  build_and_test:
+    runs-on: ubuntu-latest  # 1. Использование последней версии Ubuntu
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Install Dependencies
-        run: npm install  # 3. npm install вместо npm ci
+        run: npm install  # 2. Использование npm install вместо npm ci
+
       - name: Run Tests
-        run: ./run_tests.sh || true  # 4. игнор результата тестов
+        run: ./run_tests.sh || true  # 3. Игнорирование результатов тестов
+
+      - name: Build Docker Image
+        run: docker-compose build  # 4. Использование устаревшей установки docker-compose
+
       - name: Deploy
-        # run: ssh user@server "deploy_script.sh"  # 5. небезопасный SSH-доступ
-        run: echo "Skipping deploy step for now"
-      - name: Build and Deploy
-        # run: docker-compose up -d --build  # 6. отсутствие кэширования сборки
-        run: echo "Skipping deploy step for now"
+        run: ssh user@server "docker-compose up -d"  # 5. Небезопасный SSH-доступ
